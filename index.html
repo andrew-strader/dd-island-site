@@ -129,13 +129,7 @@ header,main,footer{position:relative;z-index:1}
 document.getElementById('year').textContent = new Date().getFullYear();
 
 // --- Livelier floating dog cutouts (default image embedded) ---
-(function(){
-  const swarmEl = document.getElementById('swarm');
-  if(!swarmEl) return;
-
-  // If you previously embedded a base64 dog image, put it here as a data URI.
-  // Or leave null to keep your current markup-driven image handling.
-  let dogUrl = null; // ← replace with "data:image/jpeg;base64,AAA...END==" if you want to hard-set it
+  let dogUrl = "IMG_0016.jpg";
 
   const COUNT = 42;               // more sprites = livelier
   const sprites = [];
