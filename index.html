@@ -27,10 +27,12 @@
   @media(min-width:720px){ .two-col{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:start} }
   .btn{display:inline-block;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;text-decoration:none;border-radius:6px}
   .btn:hover{background:#151515;text-decoration:none}
-  .swarm{position:fixed;inset:0;pointer-events:none;z-index:2}
-  header,main,footer{position:relative;z-index:1}
-  .sprite{position:absolute;width:32px;height:32px;border-radius:6px;overflow:hidden;opacity:.85;filter:grayscale(90%)}
-  .sprite img{width:100%;height:100%;object-fit:cover}
+  /* Swarm layer */
+.swarm{position:fixed;inset:0;pointer-events:none;z-index:2}
+header,main,footer{position:relative;z-index:1}
+/* Sprite look */
+.sprite{position:absolute;width:32px;height:32px;border-radius:6px;overflow:hidden;opacity:.8;filter:grayscale(90%)}
+.sprite img{width:100%;height:100%;object-fit:cover}
 </style>
 </head>
 <body>
@@ -123,16 +125,19 @@
 </footer>
 
 <div id="swarm" class="swarm" aria-hidden="true"></div>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
 
-<script>document.getElementById('year').textContent = new Date().getFullYear();
-
-// --- Tiny floating dog cutouts (default image embedded) ---
+// --- Livelier floating dog cutouts (default image embedded) ---
 (function(){
   const swarmEl = document.getElementById('swarm');
   if(!swarmEl) return;
 
-  let dogUrl = "data:image/jpeg;base64,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";  // everyone sees the same image
-  const COUNT = 28;
+  // If you previously embedded a base64 dog image, put it here as a data URI.
+  // Or leave null to keep your current markup-driven image handling.
+  let dogUrl = null; // ← replace with "data:image/jpeg;base64,AAA...END==" if you want to hard-set it
+
+  const COUNT = 42;               // more sprites = livelier
   const sprites = [];
   const state = [];
   const W = ()=>window.innerWidth, H = ()=>window.innerHeight;
@@ -143,48 +148,88 @@
     d.style.width = d.style.height = size + 'px';
     const img = document.createElement('img');
     img.alt = 'decorative'; img.draggable = false;
-    img.src = dogUrl;
+    // Fallback: subtle mint square if no dogUrl is set
+    img.src = dogUrl || 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+         <rect width="100%" height="100%" rx="6" ry="6" fill="#ccffdd" opacity="0.25"/>
+       </svg>`
+    );
     d.appendChild(img);
     swarmEl.appendChild(d);
     return d;
   }
 
   for(let i=0;i<COUNT;i++){
-    const size = 22 + Math.random()*18; // 22-40px
+    const size = 20 + Math.random()*24; // 20–44px
     const s = makeSprite(size);
     sprites.push(s);
     state.push({
       x: Math.random()*W(), y: Math.random()*H(),
-      vx: (Math.random()*2-1)*0.7, vy: (Math.random()*2-1)*0.7,
-      size
+      vx: (Math.random()*2-1)*1.1, vy: (Math.random()*2-1)*1.1, // initial speed
+      size,
+      wobble: Math.random()*Math.PI*2,
+      spin: (Math.random()*2-1)*0.02
     });
   }
 
   let mx = W()/2, my = H()/2;
   window.addEventListener('mousemove', (e)=>{ mx=e.clientX; my=e.clientY; }, {passive:true});
   window.addEventListener('touchmove', (e)=>{ if(e.touches[0]){mx=e.touches[0].clientX; my=e.touches[0].clientY;} }, {passive:true});
+  window.addEventListener('resize', ()=>{}, {passive:true});
 
+  let t = 0;
   function step(){
+    t += 0.016;
     const w=W(), h=H();
     for(let i=0;i<COUNT;i++){
       const st = state[i];
+
+      // gentle follow toward cursor
       const dx = mx - st.x, dy = my - st.y;
       const dist = Math.max(1, Math.hypot(dx,dy));
-      const force = 0.018;
-      st.vx += (dx/dist)*force; st.vy += (dy/dist)*force;
-      st.vx *= 0.986; st.vy *= 0.986; // damping
-      st.x += st.vx; st.y += st.vy;
+      const follow = 0.022; // ↑ make bigger for stronger attraction
+      st.vx += (dx/dist)*follow;
+      st.vy += (dy/dist)*follow;
 
+      // floaty wobble + tiny randomness
+      st.wobble += 0.03 + Math.random()*0.01;
+      st.vx += Math.sin(st.wobble + i*0.3) * 0.05;
+      st.vy += Math.cos(st.wobble + i*0.3) * 0.05;
+
+      // occasional impulse to keep things lively
+      if (Math.random() < 0.01){
+        st.vx += (Math.random()*2-1)*0.6;
+        st.vy += (Math.random()*2-1)*0.6;
+      }
+
+      // damping + integrate
+      st.vx *= 0.985; st.vy *= 0.985;
+      st.x += st.vx;  st.y += st.vy;
+
+      // bounce edges
       if(st.x < 0){ st.x=0; st.vx = Math.abs(st.vx); }
       if(st.y < 0){ st.y=0; st.vy = Math.abs(st.vy); }
       if(st.x > w - st.size){ st.x = w - st.size; st.vx = -Math.abs(st.vx); }
       if(st.y > h - st.size){ st.y = h - st.size; st.vy = -Math.abs(st.vy); }
 
-      sprites[i].style.transform = `translate(${st.x}px, ${st.y}px)`;
+      // render transform + soft breathing opacity
+      const el = sprites[i];
+      st.spin += 0.002 * (st.vx + st.vy);
+      el.style.transform = `translate(${st.x}px, ${st.y}px) rotate(${st.spin}rad)`;
+      el.style.opacity = 0.35 + 0.5 * (0.5 + 0.5*Math.sin(t + i));
     }
     requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
+
+  // Public API: let you swap the image later if you want
+  window.setDogImage = function(url){
+    dogUrl = url;
+    sprites.forEach(el=>{
+      const img = el.querySelector('img');
+      if(img) img.src = dogUrl;
+    });
+  };
 })();
 </script>
 </body>
