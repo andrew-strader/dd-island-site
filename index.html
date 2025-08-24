@@ -120,64 +120,91 @@
   <div id="swarm" class="swarm" aria-hidden="true"></div>
 
   <!-- Swarm script -->
-  <script>
-  (function(){
-    var y = document.getElementById('year');
-    if (y) y.textContent = new Date().getFullYear();
-  })();
+<script>
+(function(){
+  var y = document.getElementById('year');
+  if (y) y.textContent = new Date().getFullYear();
+})();
 
-  (function(){
-    const swarmEl = document.getElementById('swarm');
-    if (!swarmEl) return;
+/* --- Upward-floating dog swarm --- */
+(function(){
+  const swarmEl = document.getElementById('swarm');
+  if (!swarmEl) return;
 
-    let dogUrl = "/IMG_0016.jpg?v=1"; // sprite image (dog)
-    const COUNT = 42;
-    const sprites = [], state = [];
-    const W = ()=>innerWidth, H = ()=>innerHeight;
+  // 👇 Explicit dog image file in repo root
+  const DOG_IMG = "/IMG_0016.jpg";  
 
-    function makeSprite(size){
-      const d = document.createElement('div');
-      d.className = 'sprite';
-      d.style.width = d.style.height = size + 'px';
-      const img = document.createElement('img');
-      img.alt = 'decorative'; img.draggable = false;
-      img.src = dogUrl;
-      d.appendChild(img);
-      swarmEl.appendChild(d);
-      return d;
-    }
+  const COUNT   = 48;
+  const MIN_S   = 18, MAX_S = 42;
+  const MIN_VY  = 0.35, MAX_VY = 1.15;
+  const DRIFT   = 0.45;
+  const FLICKER = 0.4;
 
-    for (let i=0;i<COUNT;i++){
-      const size = 20 + Math.random()*24;
-      const s = makeSprite(size);
-      sprites.push(s);
-      state.push({x:Math.random()*W(), y:Math.random()*H(), vx:(Math.random()*2-1)*1.1, vy:(Math.random()*2-1)*1.1, size, wobble:Math.random()*Math.PI*2, spin:(Math.random()*2-1)*0.02});
-    }
+  const sprites = [];
+  const state = [];
+  const W = () => window.innerWidth;
+  const H = () => window.innerHeight;
 
-    let mx=W()/2, my=H()/2, t=0;
-    addEventListener('mousemove', e=>{mx=e.clientX; my=e.clientY;}, {passive:true});
-    addEventListener('touchmove', e=>{if(e.touches[0]){mx=e.touches[0].clientX; my=e.touches[0].clientY;}}, {passive:true});
+  function rand(a, b){ return a + Math.random()*(b-a); }
+  function makeSprite(size){
+    const el = document.createElement('div');
+    el.className = 'sprite';
+    el.style.width = el.style.height = size + 'px';
+    const img = document.createElement('img');
+    img.alt = 'dog sprite'; 
+    img.draggable = false;
+    img.src = DOG_IMG;     // ✅ Always the dog image
+    el.appendChild(img);
+    swarmEl.appendChild(el);
+    return el;
+  }
 
-    function step(){
-      t+=0.016; const w=W(), h=H();
-      for (let i=0;i<COUNT;i++){
-        const st=state[i], dx=mx-st.x, dy=my-st.y, dist=Math.max(1,Math.hypot(dx,dy));
-        st.vx+=(dx/dist)*0.022; st.vy+=(dy/dist)*0.022;
-        st.wobble+=0.03+Math.random()*0.01;
-        st.vx+=Math.sin(st.wobble+i*0.3)*0.05; st.vy+=Math.cos(st.wobble+i*0.3)*0.05;
-        if(Math.random()<0.01){st.vx+=(Math.random()*2-1)*0.6; st.vy+=(Math.random()*2-1)*0.6;}
-        st.vx*=0.985; st.vy*=0.985; st.x+=st.vx; st.y+=st.vy;
-        if(st.x<0){st.x=0; st.vx=Math.abs(st.vx);} if(st.y<0){st.y=0; st.vy=Math.abs(st.vy);}
-        if(st.x>w-st.size){st.x=w-st.size; st.vx=-Math.abs(st.vx);} if(st.y>h-st.size){st.y=h-st.size; st.vy=-Math.abs(st.vy);}
-        const el=swarmEl.children[i]; st.spin+=0.002*(st.vx+st.vy);
-        el.style.transform=`translate(${st.x}px,${st.y}px) rotate(${st.spin}rad)`;
-        el.style.opacity=0.35+0.5*(0.5+0.5*Math.sin(t+i));
+  function spawn(i, yStart){
+    const size = rand(MIN_S, MAX_S);
+    const x = rand(0, Math.max(1, W() - size));
+    const phase = Math.random() * Math.PI * 2;
+    const vy = -rand(MIN_VY, MAX_VY);     // upward
+    const vxBase = rand(-0.25, 0.25);
+    const wobble = rand(0.002, 0.008);
+    state[i] = { x, y: yStart ?? (H() + rand(0, H()*0.6)), vx: vxBase, vy, size, phase, wobble, spin: rand(-0.02, 0.02) };
+    const el = sprites[i];
+    el.style.width = el.style.height = size + 'px';
+    el.style.opacity = 0.35 + Math.random()*0.4;
+  }
+
+  for (let i=0; i<COUNT; i++){
+    const el = makeSprite(rand(MIN_S, MAX_S));
+    sprites.push(el);
+    spawn(i, rand(0, H()));
+  }
+
+  function step(t){
+    const w = W(), h = H();
+    for (let i=0; i<COUNT; i++){
+      const st = state[i];
+      st.phase += st.wobble;
+      const sinDrift = Math.sin(st.phase) * DRIFT;
+      st.x += st.vx + sinDrift;
+      st.y += st.vy;
+
+      // wrap/bounce horizontally
+      if (st.x < -st.size) st.x = w;
+      if (st.x >  w)       st.x = -st.size;
+
+      // respawn when off top
+      if (st.y < -st.size){
+        spawn(i, h + rand(10, h*0.5));
       }
-      requestAnimationFrame(step);
+
+      st.spin += 0.0015 * (st.vx + st.vy);
+      const el = sprites[i];
+      el.style.transform = `translate(${st.x}px, ${st.y}px) rotate(${st.spin}rad)`;
+      el.style.opacity   = 0.35 + FLICKER * (0.5 + 0.5*Math.sin(t*0.001 + i));
     }
     requestAnimationFrame(step);
-  })();
-  </script>
-
+  }
+  requestAnimationFrame(step);
+})();
+</script>
 </body>
 </html>
