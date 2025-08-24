@@ -29,12 +29,11 @@
     .btn{display:inline-block;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;text-decoration:none;border-radius:6px}
     .btn:hover{background:#151515;text-decoration:none}
 
-    /* ====== 🔧 SWARM CSS START — copy this block into your <style> ====== */
+    /* ====== Swarm CSS ====== */
     .swarm{position:fixed;inset:0;pointer-events:none;z-index:2}
     header,main,footer{position:relative;z-index:1}
     .sprite{position:absolute;width:32px;height:32px;border-radius:6px;overflow:hidden;opacity:.8;filter:grayscale(90%)}
     .sprite img{width:100%;height:100%;object-fit:cover}
-    /* ====== 🔧 SWARM CSS END ====== */
   </style>
 </head>
 <body>
@@ -53,9 +52,8 @@
       <div class="hero">
         <div class="photo-shell">
           <figure>
-            <!-- Keep your existing hero <img> src if you already have one in GitHub.
-                 If you want a placeholder here, set src to your band photo filename. -->
-            <img class="hero-img" alt="DD Island band photo" src="band.jpg" />
+            <!-- Hero band photo -->
+            <img class="hero-img" alt="DD Island band photo" src="/0031_5.jpg?v=1" loading="eager" fetchpriority="high" />
           </figure>
         </div>
       </div>
@@ -69,11 +67,13 @@
           <h2>About</h2>
           <p>Hello! we're DD Island. we make folk rock-ish music in Brooklyn. we hope you'll listen to some of our recordings, or come see us at a show, or support us by purchasing some merch :)</p>
           <p>We are:</p>
-          <p><a href="https://www.instagram.com/dd.island/?hl=en">Brandon Rhodes</a> — vocals, guitar<br>
-          <a href="https://www.instagram.com/andrustrader/?hl=en">Andrew Strader</a> — bass<br>
-          <a href="https://www.instagram.com/staticzachstaticzach/?hl=en">Zach Litchman</a> — drums<br>
-          <a href="https://www.instagram.com/jerbatt/?hl=en">Jeremy Batt</a> — guitar, lap steel<br>
-          <a href="https://www.instagram.com/spensernaess/?hl=en">Spenser</a> — guitar, pedal steel</p>
+          <p>
+            <a href="https://www.instagram.com/dd.island/?hl=en">Brandon Rhodes</a> — vocals, guitar<br>
+            <a href="https://www.instagram.com/andrustrader/?hl=en">Andrew Strader</a> — bass<br>
+            <a href="https://www.instagram.com/staticzachstaticzach/?hl=en">Zach Litchman</a> — drums<br>
+            <a href="https://www.instagram.com/jerbatt/?hl=en">Jeremy Batt</a> — guitar, lap steel<br>
+            <a href="https://www.instagram.com/spensernaess/?hl=en">Spenser</a> — guitar, pedal steel
+          </p>
         </div>
       </div>
     </section>
@@ -116,29 +116,24 @@
     </div>
   </footer>
 
-  <!-- ====== 🔧 SWARM HOST DIV — copy this <div> near the end of <body> ====== -->
+  <!-- Swarm host -->
   <div id="swarm" class="swarm" aria-hidden="true"></div>
-  <!-- ====== 🔧 END SWARM HOST DIV ====== -->
 
-  <!-- ====== 🔧 SWARM SCRIPT START — paste this after the host div, before </body> ====== -->
+  <!-- Swarm script -->
   <script>
-  // Safe year setter (won't throw if #year missing)
   (function(){
     var y = document.getElementById('year');
     if (y) y.textContent = new Date().getFullYear();
   })();
 
-  // Livelier floating dog cutouts (uses IMG_0016.jpg from repo root)
   (function(){
     const swarmEl = document.getElementById('swarm');
     if (!swarmEl) return;
 
-    let dogUrl = "IMG_0016.jpg"; // ← ensure this image exists next to index.html (case sensitive)
-
+    let dogUrl = "/IMG_0016.jpg?v=1"; // sprite image (dog)
     const COUNT = 42;
-    const sprites = [];
-    const state = [];
-    const W = ()=>window.innerWidth, H = ()=>window.innerHeight;
+    const sprites = [], state = [];
+    const W = ()=>innerWidth, H = ()=>innerHeight;
 
     function makeSprite(size){
       const d = document.createElement('div');
@@ -152,72 +147,37 @@
       return d;
     }
 
-    for (let i=0; i<COUNT; i++){
-      const size = 20 + Math.random()*24; // 20–44px
+    for (let i=0;i<COUNT;i++){
+      const size = 20 + Math.random()*24;
       const s = makeSprite(size);
       sprites.push(s);
-      state.push({
-        x: Math.random()*W(), y: Math.random()*H(),
-        vx: (Math.random()*2-1)*1.1, vy: (Math.random()*2-1)*1.1,
-        size,
-        wobble: Math.random()*Math.PI*2,
-        spin: (Math.random()*2-1)*0.02
-      });
+      state.push({x:Math.random()*W(), y:Math.random()*H(), vx:(Math.random()*2-1)*1.1, vy:(Math.random()*2-1)*1.1, size, wobble:Math.random()*Math.PI*2, spin:(Math.random()*2-1)*0.02});
     }
 
-    let mx = W()/2, my = H()/2;
-    window.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; }, {passive:true});
-    window.addEventListener('touchmove', e=>{ if(e.touches[0]){ mx=e.touches[0].clientX; my=e.touches[0].clientY; } }, {passive:true});
+    let mx=W()/2, my=H()/2, t=0;
+    addEventListener('mousemove', e=>{mx=e.clientX; my=e.clientY;}, {passive:true});
+    addEventListener('touchmove', e=>{if(e.touches[0]){mx=e.touches[0].clientX; my=e.touches[0].clientY;}}, {passive:true});
 
-    let t = 0;
     function step(){
-      t += 0.016;
-      const w=W(), h=H();
-      for (let i=0; i<COUNT; i++){
-        const st = state[i];
-        const dx = mx - st.x, dy = my - st.y;
-        const dist = Math.max(1, Math.hypot(dx,dy));
-        const follow = 0.022;
-        st.vx += (dx/dist)*follow;
-        st.vy += (dy/dist)*follow;
-
-        st.wobble += 0.03 + Math.random()*0.01;
-        st.vx += Math.sin(st.wobble + i*0.3) * 0.05;
-        st.vy += Math.cos(st.wobble + i*0.3) * 0.05;
-
-        if (Math.random() < 0.01){
-          st.vx += (Math.random()*2-1)*0.6;
-          st.vy += (Math.random()*2-1)*0.6;
-        }
-
-        st.vx *= 0.985; st.vy *= 0.985;
-        st.x += st.vx;  st.y += st.vy;
-
-        if (st.x < 0){ st.x=0; st.vx = Math.abs(st.vx); }
-        if (st.y < 0){ st.y=0; st.vy = Math.abs(st.vy); }
-        if (st.x > w - st.size){ st.x = w - st.size; st.vx = -Math.abs(st.vx); }
-        if (st.y > h - st.size){ st.y = h - st.size; st.vy = -Math.abs(st.vy); }
-
-        const el = sprites[i];
-        st.spin += 0.002 * (st.vx + st.vy);
-        el.style.transform = `translate(${st.x}px, ${st.y}px) rotate(${st.spin}rad)`;
-        el.style.opacity = 0.35 + 0.5 * (0.5 + 0.5*Math.sin(t + i));
+      t+=0.016; const w=W(), h=H();
+      for (let i=0;i<COUNT;i++){
+        const st=state[i], dx=mx-st.x, dy=my-st.y, dist=Math.max(1,Math.hypot(dx,dy));
+        st.vx+=(dx/dist)*0.022; st.vy+=(dy/dist)*0.022;
+        st.wobble+=0.03+Math.random()*0.01;
+        st.vx+=Math.sin(st.wobble+i*0.3)*0.05; st.vy+=Math.cos(st.wobble+i*0.3)*0.05;
+        if(Math.random()<0.01){st.vx+=(Math.random()*2-1)*0.6; st.vy+=(Math.random()*2-1)*0.6;}
+        st.vx*=0.985; st.vy*=0.985; st.x+=st.vx; st.y+=st.vy;
+        if(st.x<0){st.x=0; st.vx=Math.abs(st.vx);} if(st.y<0){st.y=0; st.vy=Math.abs(st.vy);}
+        if(st.x>w-st.size){st.x=w-st.size; st.vx=-Math.abs(st.vx);} if(st.y>h-st.size){st.y=h-st.size; st.vy=-Math.abs(st.vy);}
+        const el=swarmEl.children[i]; st.spin+=0.002*(st.vx+st.vy);
+        el.style.transform=`translate(${st.x}px,${st.y}px) rotate(${st.spin}rad)`;
+        el.style.opacity=0.35+0.5*(0.5+0.5*Math.sin(t+i));
       }
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
-
-    // Optional: swap image later
-    window.setDogImage = function(url){
-      dogUrl = url;
-      sprites.forEach(el=>{
-        const img = el.querySelector('img');
-        if (img) img.src = dogUrl;
-      });
-    };
   })();
   </script>
-  <!-- ====== 🔧 SWARM SCRIPT END ====== -->
 
 </body>
 </html>
