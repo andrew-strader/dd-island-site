@@ -34,6 +34,33 @@
     header,main,footer{position:relative;z-index:1}
     .sprite{position:absolute;width:32px;height:32px;border-radius:6px;overflow:hidden;opacity:.8;filter:grayscale(90%)}
     .sprite img{width:100%;height:100%;object-fit:cover}
+    /* Hide system cursor */
+html, body { cursor: none; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+/* the custom cursor image */
+#finger-cursor {
+  position: fixed;
+  left: 0; top: 0;
+  width: 120px;   /* adjust size if needed */
+  height: auto;
+  pointer-events: none;
+  transform: translate(-24px, -8px); /* hotspot offset */
+  transition: transform 60ms linear;
+  z-index: 9999;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
+}
+
+/* click press animation */
+.is-pressing #finger-cursor {
+  transform: translate(-24px, -8px) scale(.96);
+}
+
+/* disable on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  html, body { cursor: auto; }
+  #finger-cursor { display: none; }
+}
   </style>
 </head>
 <body>
@@ -204,6 +231,45 @@
     requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
+})();
+</script>
+  <img id="finger-cursor" src="/IMG_2651.PNG" alt="cursor foam finger">
+  <script>
+(function () {
+  const img = document.getElementById('finger-cursor');
+  if (!img) return;
+
+  // Hotspot offset so tip aligns with clicks
+  const hotspot = { x: 24, y: 8 };
+
+  // Track mouse
+  let raf = null, x = 0, y = 0, tx = 0, ty = 0;
+  window.addEventListener('mousemove', (e) => {
+    x = e.clientX; y = e.clientY;
+    if (!raf) raf = requestAnimationFrame(step);
+  }, { passive: true });
+
+  function step() {
+    tx += (x - tx) * 0.35;
+    ty += (y - ty) * 0.35;
+    img.style.transform = `translate(${tx - hotspot.x}px, ${ty - hotspot.y}px)`;
+    raf = null;
+  }
+
+  // click press effect
+  window.addEventListener('mousedown', () => document.documentElement.classList.add('is-pressing'));
+  window.addEventListener('mouseup',   () => document.documentElement.classList.remove('is-pressing'));
+
+  // fallback if image fails
+  img.addEventListener('error', () => {
+    img.style.display = 'none';
+    document.documentElement.style.cursor = 'auto';
+  });
+
+  // reduce-motion respect
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    img.style.transition = 'none';
+  }
 })();
 </script>
 </body>
