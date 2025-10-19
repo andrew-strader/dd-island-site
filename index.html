@@ -1,276 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DD Island</title>
-  <meta name="description" content="DD Island — experimental / ambient music" />
-
-  <style>
-    /* ====== Base Theme ====== */
-    :root{ --bg:#111; --ink:#ccffdd; --muted:#99ccaa; --rule:#2a2a2a; --link:#b3ffcc; --maxw:960px; }
-    html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-    a{color:var(--link);text-decoration:none} a:hover{text-decoration:underline}
-    header{border-bottom:1px solid var(--rule)}
-    .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 20px}
-    nav{display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
-    .brand{font-size:22px;letter-spacing:.5px}
-    .nav-links{display:flex;gap:14px;align-items:center} .nav-links a{opacity:.9}
-    .hero{padding:28px 0 8px}
-    .photo-shell{position:relative;border:1px solid var(--rule);background:#0a0a0a}
-    .photo-shell figure{margin:0} .hero-img{display:block;width:100%;height:auto}
-    section{padding:36px 20px;border-top:1px solid var(--rule)}
-    section h2{font-size:20px;font-weight:600;margin:0 0 14px;letter-spacing:.2px;color:var(--ink)}
-    p{margin:0 0 14px;color:var(--ink)}
-    .muted{color:var(--muted)}
-    footer{border-top:1px solid var(--rule)} .small{font-size:13px;color:var(--ink)}
-    @media(min-width:720px){ .two-col{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:start} }
-    .btn{display:inline-block;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;text-decoration:none;border-radius:6px}
-    .btn:hover{background:#151515;text-decoration:none}
-
-    /* ====== Swarm CSS ====== */
-    .swarm{position:fixed;inset:0;pointer-events:none;z-index:2}
-    header,main,footer{position:relative;z-index:1}
-    .sprite{position:absolute;width:32px;height:32px;border-radius:6px;overflow:hidden;opacity:.8;filter:grayscale(90%)}
-    .sprite img{width:100%;height:100%;object-fit:cover}
-    /* Hide system cursor */
-html, body { cursor: none; }
-:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
-
-/* the custom cursor image */
-#finger-cursor {
-  position: fixed;
-  left: 0; top: 0;
-  width: 48px;   /* adjust size if needed */
-  height: auto;
-  pointer-events: none;
-  transform: translate(-24px, -8px); /* hotspot offset */
-  transition: transform 60ms linear;
-  z-index: 9999;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
-}
-
-/* click press animation */
-.is-pressing #finger-cursor {
-  transform: translate(-24px, -8px) scale(.96);
-}
-
-/* disable on touch devices */
-@media (hover: none) and (pointer: coarse) {
-  html, body { cursor: auto; }
-  #finger-cursor { display: none; }
-}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DD Island</title>
+<meta name="description" content="DD Island — experimental / ambient music" />
+<style>
+  :root{ --bg:#111; --ink:#ccffdd; --muted:#99ccaa; --rule:#2a2a2a; --link:#b3ffcc; --maxw:960px; }
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+  a{color:var(--link);text-decoration:none} a:hover{text-decoration:underline}
+  header{border-bottom:1px solid var(--rule)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 20px}
+  nav{display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+  .brand{font-size:22px;letter-spacing:.5px}
+  .nav-links{display:flex;gap:14px;align-items:center} .nav-links a{opacity:.9}
+  .hero{padding:28px 0 8px}
+  .photo-shell{position:relative;border:1px solid var(--rule);background:#0a0a0a}
+  .photo-shell figure{margin:0}
+  .hero-img{display:block;width:100%;height:auto}
+  section{padding:36px 20px;border-top:1px solid var(--rule)}
+  section h2{font-size:20px;font-weight:600;margin:0 0 14px;letter-spacing:.2px;color:var(--ink)}
+  p{margin:0 0 14px;color:var(--ink)}
+  .muted{color:var(--muted)}
+  .list{list-style:none;padding:0;margin:0} .list li{padding:8px 0;border-bottom:1px dotted var(--rule);color:var(--ink)}
+  footer{border-top:1px solid var(--rule)}
+  .small{font-size:13px;color:var(--ink)}
+  @media(min-width:720px){ .two-col{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:start} }
+  .btn{display:inline-block;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;text-decoration:none;border-radius:6px}
+  .btn:hover{background:#151515;text-decoration:none}
+</style>
 </head>
 <body>
-
-  <header>
-    <div class="wrap">
-      <nav>
-        <div class="brand">DD Island</div>
-        <div class="nav-links small">
-          <a href="#about">About</a>
-          <a href="#music">Music</a>
-          <a href="#shows">Shows</a>
-          <a href="#contact">Contact</a>
-        </div>
-      </nav>
-      <div class="hero">
-        <div class="photo-shell">
-          <figure>
-            <!-- Hero band photo -->
-            <img class="hero-img" alt="DD Island band photo" src="/0031_5.jpg?v=1" loading="eager" fetchpriority="high" />
-          </figure>
-        </div>
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="brand">DD Island</div>
+      <div class="nav-links small">
+        <a href="#about">About</a>
+        <a href="#music">Music</a>
+        <a href="#shows">Shows</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+    <div class="hero">
+      <div class="photo-shell">
+        <figure>
+          <img class="hero-img" alt="DD Island band photo" src="/0031_5.jpg?v=1" />
+        </figure>
       </div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main>
-    <section id="about">
-      <div class="wrap two-col">
-        <div>
-          <h2>About</h2>
-          <p>Hello! we're DD Island. we make folk rock-ish music in Brooklyn. we hope you'll listen to some of our recordings, or come see us at a show, or support us by purchasing some merch :)</p>
-          <p>We are:</p>
-          <p>
-            <a href="https://www.instagram.com/dd.island/?hl=en">Brandon Rhodes</a> — vocals, guitar<br>
-            <a href="https://www.instagram.com/andrustrader/?hl=en">Andrew Strader</a> — bass<br>
-            <a href="https://www.instagram.com/staticzachstaticzach/?hl=en">Zach Litchman</a> — drums<br>
-            <a href="https://www.instagram.com/jerbatt/?hl=en">Jeremy Batt</a> — guitar, lap steel<br>
-            <a href="https://www.instagram.com/spensernaess/?hl=en">Spenser Naess</a> — guitar, pedal steel
-          </p>
-        </div>
+<main>
+  <section id="about">
+    <div class="wrap two-col">
+      <div>
+        <h2>About</h2>
+        <p>Hello! we're DD Island. we make folk rock-ish music in Brooklyn. we hope you'll listen to some of our recordings, or come see us at a show, or support us by purchasing some merch :)</p>
+        <p>We are:</p>
+        <p>
+          <a href="https://www.instagram.com/dd.island/?hl=en">Brandon Rhodes</a> — vocals, guitar<br>
+          <a href="https://www.instagram.com/andrustrader/?hl=en">Andrew Strader</a> — bass<br>
+          <a href="https://www.instagram.com/staticzachstaticzach/?hl=en">Zach Litchman</a> — drums<br>
+          <a href="https://www.instagram.com/jerbatt/?hl=en">Jeremy Batt</a> — guitar, lap steel<br>
+          <a href="https://www.instagram.com/spensernaess/?hl=en">Spenser</a> — guitar, pedal steel
+        </p>
       </div>
-    </section>
-
-    <section id="music">
-      <div class="wrap">
-        <h2>Music</h2>
-        <div>
-          <a class="btn" href="https://ffm.to/ddisland" target="_blank" rel="noopener">Stream “waiting for the day”</a><br><br>
-          <a class="btn" href="https://www.youtube.com/watch?v=mB9XFqo_M-I" target="_blank" rel="noopener">Live at Baby’s All Right (Full Set) — Feb 16, 2025</a><br><br>
-          <a class="btn" href="https://youtu.be/8GZ0rsgJCnw" target="_blank" rel="noopener">“waiting for the day” — Official Music Video</a><br><br>
-          <a class="btn" href="https://open.spotify.com/artist/5uTjgJJCMC26fiKIJzDpx5" target="_blank" rel="noopener">Spotify</a><br><br>
-          <a class="btn" href="https://www.youtube.com/channel/UC4ZkdAnw5vL9ORD8eH-MIYQ" target="_blank" rel="noopener">YouTube</a><br><br>
-          <a class="btn" href="https://ddisland.bandcamp.com" target="_blank" rel="noopener">Bandcamp</a><br><br>
-          <a class="btn" href="https://music.apple.com/us/artist/dd-island/1508447338" target="_blank" rel="noopener">Apple Music</a><br><br>
-          <iframe width="100%" height="400" src="https://www.youtube.com/embed/4qP45Z8gZLs" title="Cellar Sessions video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        </div>
-      </div>
-    </section>
-
-    <section id="shows">
-      <div class="wrap">
-        <h2>Upcoming Shows</h2>
-        <p>We're taking a break from shows for the rest of 2025 to prepare for our record release in the spring.</p>
-      </div>
-    </section>
-
-    <section id="contact">
-      <div class="wrap">
-        <h2>Contact</h2>
-        <p>To work with us, book a show, or even just to say hello:</p>
-        <p><a href="mailto:d.d.island.music@gmail.com" class="btn">Email us</a></p>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap">
-      <p class="small muted">© <span id="year"></span> DD Island</p>
     </div>
-  </footer>
+  </section>
 
-  <!-- Swarm host -->
-  <div id="swarm" class="swarm" aria-hidden="true"></div>
+  <section id="music">
+    <div class="wrap">
+      <h2>Music</h2>
+      <div>
+        <a class="btn" href="https://ffm.to/ddisland" target="_blank" rel="noopener">Stream “waiting for the day”</a><br><br>
+        <a class="btn" href="https://www.youtube.com/watch?v=mB9XFqo_M-I" target="_blank" rel="noopener">Live at Baby’s All Right (Full Set) — Feb 16, 2025</a><br><br>
+        <a class="btn" href="https://youtu.be/8GZ0rsgJCnw" target="_blank" rel="noopener">“waiting for the day” — Official Music Video</a><br><br>
+        <a class="btn" href="https://open.spotify.com/artist/5uTjgJJCMC26fiKIJzDpx5" target="_blank" rel="noopener">Spotify</a><br><br>
+        <a class="btn" href="https://www.youtube.com/channel/UC4ZkdAnw5vL9ORD8eH-MIYQ" target="_blank" rel="noopener">YouTube</a><br><br>
+        <a class="btn" href="https://ddisland.bandcamp.com" target="_blank" rel="noopener">Bandcamp</a><br><br>
+        <a class="btn" href="https://music.apple.com/us/artist/dd-island/1508447338" target="_blank" rel="noopener">Apple Music</a><br><br>
+        <iframe width="100%" height="400" src="https://www.youtube.com/embed/4qP45Z8gZLs" title="Cellar Sessions video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
 
-  <!-- Swarm script -->
+  <section id="shows">
+    <div class="wrap">
+      <h2>Upcoming Shows</h2>
+      <p>We're taking a break from shows for the rest of 2025 to prepare for our record release in the spring.</p>
+    </div>
+  </section>
+
+  <section id="store">
+    <div class="wrap">
+      <h2>Store</h2>
+      <p class="muted">We ship orders ourselves from Brooklyn. You’ll get an email receipt; we get an alert and pack it up.</p>
+      <div>
+        <!-- Add real product image/links when ready -->
+        <a class="btn" href="#" target="_blank" rel="noopener">T-Shirt — $25</a>
+      </div>
+      <br>
+      <div>
+        <a class="btn" href="#" target="_blank" rel="noopener">Hat — $40</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <h2>Contact</h2>
+      <p>To work with us, book a show, or even just to say hello:</p>
+      <p><a href="mailto:d.d.island.music@gmail.com" class="btn">Email us</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="small muted">© <span id="year"></span> DD Island</p>
+  </div>
+</footer>
+
 <script>
-(function(){
-  var y = document.getElementById('year');
-  if (y) y.textContent = new Date().getFullYear();
-})();
-
-/* --- Upward-floating dog swarm --- */
-(function(){
-  const swarmEl = document.getElementById('swarm');
-  if (!swarmEl) return;
-
-  // 👇 Explicit dog image file in repo root
-  const DOG_IMG = "/IMG_0016.jpg";  
-
-  const COUNT   = 12;
-  const MIN_S   = 18, MAX_S = 42;
-  const MIN_VY  = 0.35, MAX_VY = 1.15;
-  const DRIFT   = 0.45;
-  const FLICKER = 0.4;
-
-  const sprites = [];
-  const state = [];
-  const W = () => window.innerWidth;
-  const H = () => window.innerHeight;
-
-  function rand(a, b){ return a + Math.random()*(b-a); }
-  function makeSprite(size){
-    const el = document.createElement('div');
-    el.className = 'sprite';
-    el.style.width = el.style.height = size + 'px';
-    const img = document.createElement('img');
-    img.alt = 'dog sprite'; 
-    img.draggable = false;
-    img.src = DOG_IMG;     // ✅ Always the dog image
-    el.appendChild(img);
-    swarmEl.appendChild(el);
-    return el;
-  }
-
-  function spawn(i, yStart){
-    const size = rand(MIN_S, MAX_S);
-    const x = rand(0, Math.max(1, W() - size));
-    const phase = Math.random() * Math.PI * 2;
-    const vy = -rand(MIN_VY, MAX_VY);     // upward
-    const vxBase = rand(-0.25, 0.25);
-    const wobble = rand(0.002, 0.008);
-    state[i] = { x, y: yStart ?? (H() + rand(0, H()*0.6)), vx: vxBase, vy, size, phase, wobble, spin: rand(-0.02, 0.02) };
-    const el = sprites[i];
-    el.style.width = el.style.height = size + 'px';
-    el.style.opacity = 0.35 + Math.random()*0.4;
-  }
-
-  for (let i=0; i<COUNT; i++){
-    const el = makeSprite(rand(MIN_S, MAX_S));
-    sprites.push(el);
-    spawn(i, rand(0, H()));
-  }
-
-  function step(t){
-    const w = W(), h = H();
-    for (let i=0; i<COUNT; i++){
-      const st = state[i];
-      st.phase += st.wobble;
-      const sinDrift = Math.sin(st.phase) * DRIFT;
-      st.x += st.vx + sinDrift;
-      st.y += st.vy;
-
-      // wrap/bounce horizontally
-      if (st.x < -st.size) st.x = w;
-      if (st.x >  w)       st.x = -st.size;
-
-      // respawn when off top
-      if (st.y < -st.size){
-        spawn(i, h + rand(10, h*0.5));
-      }
-
-      st.spin += 0.0015 * (st.vx + st.vy);
-      const el = sprites[i];
-      el.style.transform = `translate(${st.x}px, ${st.y}px) rotate(${st.spin}rad)`;
-      el.style.opacity   = 0.35 + FLICKER * (0.5 + 0.5*Math.sin(t*0.001 + i));
-    }
-    requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-})();
+  // year stamp
+  (function(){ var y=document.getElementById('year'); if(y) y.textContent = new Date().getFullYear(); })();
 </script>
-  <img id="finger-cursor" src="/IMG_2651.PNG" alt="cursor foam finger">
-  <script>
-(function () {
-  const img = document.getElementById('finger-cursor');
-  if (!img) return;
 
-  // Hotspot offset so tip aligns with clicks
-  const hotspot = { x: 24, y: 8 };
-
-  // Track mouse
-  let raf = null, x = 0, y = 0, tx = 0, ty = 0;
-  window.addEventListener('mousemove', (e) => {
-    x = e.clientX; y = e.clientY;
-    if (!raf) raf = requestAnimationFrame(step);
-  }, { passive: true });
-
-  function step() {
-    tx += (x - tx) * 0.35;
-    ty += (y - ty) * 0.35;
-    img.style.transform = `translate(${tx - hotspot.x}px, ${ty - hotspot.y}px)`;
-    raf = null;
-  }
-
-  // click press effect
-  window.addEventListener('mousedown', () => document.documentElement.classList.add('is-pressing'));
-  window.addEventListener('mouseup',   () => document.documentElement.classList.remove('is-pressing'));
-
-  // fallback if image fails
-  img.addEventListener('error', () => {
-    img.style.display = 'none';
-    document.documentElement.style.cursor = 'auto';
-  });
-
-  // reduce-motion respect
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    img.style.transition = 'none';
-  }
-})();
-</script>
 </body>
 </html>
