@@ -5,33 +5,93 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>DD Island</title>
 <meta name="description" content="DD Island — experimental / ambient music" />
+
 <style>
-  :root{ --bg:#111; --ink:#ccffdd; --muted:#99ccaa; --rule:#2a2a2a; --link:#b3ffcc; --maxw:960px; }
+  :root{
+    --bg:#111;
+    --ink:#ccffdd;
+    --muted:#99ccaa;
+    --rule:#2a2a2a;
+    --link:#b3ffcc;
+    --maxw:960px;
+  }
+
   html,body{height:100%}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-  a{color:var(--link);text-decoration:none} a:hover{text-decoration:underline}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height:1.6;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale
+  }
+
+  a{color:var(--link);text-decoration:none}
+  a:hover{text-decoration:underline}
+
   header{border-bottom:1px solid var(--rule)}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 20px}
-  nav{display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+
+  nav{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    align-items:baseline;
+    justify-content:space-between
+  }
+
   .brand{font-size:22px;letter-spacing:.5px}
-  .nav-links{display:flex;gap:14px;align-items:center} .nav-links a{opacity:.9}
+  .nav-links{display:flex;gap:14px;align-items:center}
+  .nav-links a{opacity:.9}
+
   .hero{padding:28px 0 8px}
-  .photo-shell{position:relative;border:1px solid var(--rule);background:#0a0a0a}
+  .photo-shell{
+    position:relative;
+    border:1px solid var(--rule);
+    background:#0a0a0a
+  }
   .photo-shell figure{margin:0}
   .hero-img{display:block;width:100%;height:auto}
+
   section{padding:36px 20px;border-top:1px solid var(--rule)}
-  section h2{font-size:20px;font-weight:600;margin:0 0 14px;letter-spacing:.2px;color:var(--ink)}
-  p{margin:0 0 14px;color:var(--ink)}
+  section h2{
+    font-size:20px;
+    font-weight:600;
+    margin:0 0 14px;
+    letter-spacing:.2px
+  }
+
+  p{margin:0 0 14px}
   .muted{color:var(--muted)}
-  .list{list-style:none;padding:0;margin:0} .list li{padding:8px 0;border-bottom:1px dotted var(--rule);color:var(--ink)}
+
   footer{border-top:1px solid var(--rule)}
-  .small{font-size:13px;color:var(--ink)}
-  @media(min-width:720px){ .two-col{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:start} }
-  .btn{display:inline-block;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;text-decoration:none;border-radius:6px}
+  .small{font-size:13px}
+
+  @media(min-width:720px){
+    .two-col{
+      display:grid;
+      grid-template-columns:1.2fr 1fr;
+      gap:30px;
+      align-items:start
+    }
+  }
+
+  .btn{
+    display:inline-block;
+    border:1px solid var(--ink);
+    background:transparent;
+    color:var(--ink);
+    padding:8px 14px;
+    border-radius:6px
+  }
   .btn:hover{background:#151515;text-decoration:none}
 </style>
 </head>
+
 <body>
+
 <header>
   <div class="wrap">
     <nav>
@@ -43,6 +103,7 @@
         <a href="#contact">Contact</a>
       </div>
     </nav>
+
     <div class="hero">
       <div class="photo-shell">
         <figure>
@@ -54,68 +115,76 @@
 </header>
 
 <main>
-  <section id="about">
-    <div class="wrap two-col">
-      <div>
-        <h2>About</h2>
-        <p>Hello! We're DD Island. We make psych-infused, twangy folk rock in Brooklyn. We've spent the last few years playing shows with our friends in New York and along the east coast. During that time, we've also refined a collection of songs that'll be released as our first full-length record, <i>Setting Sun</i>, in spring 2026. A lot of love and hard work went into crafting this album, so we hope you'll take the time to check out our music, attend a show, or support us by purchasing some merch. </p>
-        <p>We are:</p>
-        <p>
-          <a href="https://www.instagram.com/dd.island/?hl=en">Brandon Rhodes</a> — Vocals, Guitar<br>
-          <a href="https://www.instagram.com/andrustrader/?hl=en">Andrew Strader</a> — Bass<br>
-          <a href="https://www.instagram.com/staticzachstaticzach/?hl=en">Zach Litchman</a> — Drums<br>
-          <a href="https://www.instagram.com/jerbatt/?hl=en">Jeremy Batt</a> — Guitar, Steel<br>
-          <a href="https://www.instagram.com/spensernaess/?hl=en">Spenser Naess</a> — Guitar, Steel
-        </p>
-      </div>
-    </div>
-  </section>
 
-  <section id="music">
-    <div class="wrap">
-      <h2>Music</h2>
-      <div>
-        <a class="btn" href="https://ffm.to/ddisland" target="_blank" rel="noopener">Stream “waiting for the day”</a><br><br>
-        <a class="btn" href="https://www.youtube.com/watch?v=mB9XFqo_M-I" target="_blank" rel="noopener">Live at Baby’s All Right (Full Set) — Feb 16, 2025</a><br><br>
-        <a class="btn" href="https://youtu.be/8GZ0rsgJCnw" target="_blank" rel="noopener">“waiting for the day” — Official Music Video</a><br><br>
-        <a class="btn" href="https://open.spotify.com/artist/5uTjgJJCMC26fiKIJzDpx5" target="_blank" rel="noopener">Spotify</a><br><br>
-        <a class="btn" href="https://www.youtube.com/channel/UC4ZkdAnw5vL9ORD8eH-MIYQ" target="_blank" rel="noopener">YouTube</a><br><br>
-        <a class="btn" href="https://ddisland.bandcamp.com" target="_blank" rel="noopener">Bandcamp</a><br><br>
-        <a class="btn" href="https://music.apple.com/us/artist/dd-island/1508447338" target="_blank" rel="noopener">Apple Music</a><br><br>
-        <iframe width="100%" height="400" src="https://www.youtube.com/embed/4qP45Z8gZLs" title="Cellar Sessions video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-      </div>
+<section id="about">
+  <div class="wrap two-col">
+    <div>
+      <h2>About</h2>
+      <p>
+        Hello! We're DD Island. We make psych-infused, twangy folk rock in Brooklyn.
+        We’re releasing our first full-length record <i>Setting Sun</i> in spring 2026.
+      </p>
+      <p>We are:</p>
+      <p>
+        <a href="https://www.instagram.com/dd.island/?hl=en">Brandon Rhodes</a> — Vocals, Guitar<br>
+        <a href="https://www.instagram.com/andrustrader/?hl=en">Andrew Strader</a> — Bass<br>
+        <a href="https://www.instagram.com/staticzachstaticzach/?hl=en">Zach Litchman</a> — Drums<br>
+        <a href="https://www.instagram.com/jerbatt/?hl=en">Jeremy Batt</a> — Guitar, Steel<br>
+        <a href="https://www.instagram.com/spensernaess/?hl=en">Spenser Naess</a> — Guitar, Steel
+      </p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="shows">
-    <div class="wrap">
-      <h2>Upcoming Shows</h2>
-      <p>We're taking a break from shows for the rest of 2025 to prepare for our record release in the spring.</p>
-    </div>
-  </section>
+<section id="music">
+  <div class="wrap">
+    <h2>Music</h2>
+    <a class="btn" href="https://ffm.to/ddisland" target="_blank">Stream “waiting for the day”</a><br><br>
+    <a class="btn" href="https://www.youtube.com/watch?v=mB9XFqo_M-I" target="_blank">Live at Baby’s All Right — Feb 16, 2025</a><br><br>
+    <a class="btn" href="https://ddisland.bandcamp.com" target="_blank">Bandcamp</a>
+  </div>
+</section>
 
-  <section id="store">
-    <div class="wrap">
-      <h2>Store</h2>
-      <p class="muted">We ship orders ourselves from Brooklyn. You’ll get an email receipt; we get an alert and pack it up.</p>
-      <div>
-        <!-- Add real product image/links when ready -->
-        <a class="btn" href="#" target="_blank" rel="noopener">T-Shirt — $25</a>
-      </div>
-      <br>
-      <div>
-        <a class="btn" href="https://buy.stripe.com/test_00w28r7G9cUqeVAf9v3Nm00" target="_blank" rel="noopener">Hat — $40</a>
-      </div>
-    </div>
-  </section>
+<section id="shows">
+  <div class="wrap">
+    <h2>Upcoming Shows</h2>
 
-  <section id="contact">
-    <div class="wrap">
-      <h2>Contact</h2>
-      <p>To work with us, book a show, or even just to say hello:</p>
-      <p><a href="mailto:d.d.island.music@gmail.com" class="btn">Email us</a></p>
-    </div>
-  </section>
+    <!-- Bandsintown widget -->
+    <a class="bit-widget-initializer"
+      data-artist-name="DD Island"
+      data-display-local-dates="false"
+      data-display-past-dates="false"
+      data-auto-style="false"
+      data-text-color="#FFFFFF"
+      data-link-color="#0bbcbb"
+      data-background-color="rgba(0,0,0,0)"
+      data-display-limit="15"
+      data-display-start-time="true"
+      data-link-text-color="#FFFFFF"
+      data-display-lineup="true"
+      data-display-play-my-city="true"
+      data-separator-color="rgba(124,124,124,0.25)">
+    </a>
+
+  </div>
+</section>
+
+<section id="store">
+  <div class="wrap">
+    <h2>Store</h2>
+    <p class="muted">Orders ship from Brooklyn.</p>
+    <a class="btn" href="#">T-Shirt — $25</a><br><br>
+    <a class="btn" href="https://buy.stripe.com/test_00w28r7G9cUqeVAf9v3Nm00" target="_blank">Hat — $40</a>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <p><a href="mailto:d.d.island.music@gmail.com" class="btn">Email us</a></p>
+  </div>
+</section>
+
 </main>
 
 <footer>
@@ -125,9 +194,11 @@
 </footer>
 
 <script>
-  // year stamp
-  (function(){ var y=document.getElementById('year'); if(y) y.textContent = new Date().getFullYear(); })();
+  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+
+<!-- Bandsintown widget script -->
+<script charset="utf-8" src="https://widget.bandsintown.com/main.min.js"></script>
 
 </body>
 </html>
