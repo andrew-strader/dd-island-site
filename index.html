@@ -86,6 +86,12 @@
     border-radius:6px;
   }
   .btn:hover{background:#151515;text-decoration:none}
+
+  /* YouTube embed spacing */
+  .video-embed{
+    margin-top:28px;
+    border:1px solid var(--rule);
+  }
 </style>
 </head>
 
@@ -122,7 +128,9 @@
       <h2>About</h2>
       <p>
         Hello! We're DD Island. We make psych-infused, twangy folk rock in Brooklyn.
-        We’re releasing our first full-length record <i>Setting Sun</i> in spring 2026. We hope you'll take a breather to support us by checking out our music, attending a show, or purchasing some merch :) 
+        We’re releasing our first full-length record <i>Setting Sun</i> in spring 2026.
+        We hope you'll take a breather to support us by checking out our music,
+        attending a show, or purchasing some merch :)
       </p>
       <p>We are:</p>
       <p>
@@ -139,11 +147,31 @@
 <section id="music">
   <div class="wrap">
     <h2>Music</h2>
-    <a class="btn" href="https://ffm.to/ddisland" target="_blank" rel="noopener">Stream “waiting for the day”</a><br><br>
+
+    <a class="btn" href="https://ffm.to/ddisland" target="_blank" rel="noopener">
+      Stream “waiting for the day”
+    </a><br><br>
+
     <a class="btn" href="https://www.youtube.com/watch?v=mB9XFqo_M-I" target="_blank" rel="noopener">
       Live at Baby’s All Right — Feb 16, 2025
     </a><br><br>
-    <a class="btn" href="https://ddisland.bandcamp.com" target="_blank" rel="noopener">Bandcamp</a>
+
+    <a class="btn" href="https://ddisland.bandcamp.com" target="_blank" rel="noopener">
+      Bandcamp
+    </a>
+
+    <!-- Cellar Sessions embed -->
+    <iframe
+      class="video-embed"
+      width="100%"
+      height="400"
+      src="https://www.youtube.com/embed/4qP45Z8gZLs"
+      title="DD Island – Cellar Sessions"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+
   </div>
 </section>
 
