@@ -4,158 +4,146 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>DD Island — Gallery</title>
-<meta name="description" content="DD Island photo gallery." />
+<meta name="description" content="DD Island photo gallery" />
 
 <style>
-:root{
-  --bg:#111;
-  --ink:#ccffdd;
-  --muted:#99ccaa;
-  --rule:#2a2a2a;
-  --link:#b3ffcc;
-  --maxw:1200px;
-}
+  :root{
+    --bg:#111;
+    --ink:#ccffdd;
+    --muted:#99ccaa;
+    --rule:#2a2a2a;
+    --link:#b3ffcc;
+    --maxw:1400px;
+  }
 
-html,body{height:100%}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
-  line-height:1.6;
-  font-size:17px;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height:1.6;
+    font-size:17px;
+  }
 
-a{color:var(--link);text-decoration:none}
-a:hover{text-decoration:underline}
+  a{color:var(--link);text-decoration:none}
+  a:hover{text-decoration:underline}
 
-header{border-bottom:1px solid var(--rule)}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:28px 20px}
+  header{border-bottom:1px solid var(--rule)}
+  footer{border-top:1px solid var(--rule);margin-top:32px}
 
-nav{
-  display:flex;
-  gap:18px;
-  flex-wrap:wrap;
-  align-items:baseline;
-  justify-content:space-between;
-}
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:28px 20px;
+  }
 
-.brand{font-size:22px;letter-spacing:.5px}
-.nav-links{display:flex;gap:14px;align-items:center}
-.nav-links a{opacity:.9}
-.nav-links a.active{
-  font-weight:700;
-  opacity:1;
-  text-decoration:underline;
-  text-underline-offset:6px;
-}
+  nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:18px;
+    flex-wrap:wrap;
+  }
 
-h1{font-size:22px;margin:0 0 6px}
-.subtle{color:var(--muted);font-size:13px;margin:0 0 18px}
+  .brand{
+    font-size:22px;
+    letter-spacing:.5px;
+  }
 
-/* ===== Cleaner, consistent grid ===== */
-.gallery{
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap:18px;
-  align-items:start;
-}
+  .nav-links{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    font-size:13px;
+  }
 
-.figure{
-  margin:0;
-}
+  .nav-links a{opacity:.9}
+  .nav-links a.active{
+    font-weight:600;
+    opacity:1;
+  }
 
-.thumb{
-  width:100%;
-  aspect-ratio: 4 / 3;           /* consistent shape */
-  border-radius:14px;
-  border:1px solid var(--rule);
-  overflow:hidden;
-  background:#0a0a0a;
-  cursor:pointer;
-  transition: transform .18s ease, opacity .18s ease;
-  display:block;
-}
+  h1{
+    font-size:22px;
+    font-weight:600;
+    margin:0 0 24px;
+  }
 
-.thumb:hover{ transform:scale(1.01); opacity:.92; }
+  /* Gallery grid */
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
+    gap:24px;
+  }
 
-.thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
+  .gallery-item{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
 
-/* Optional: only use these if you WANT a couple featured tiles */
-.feature-wide{ grid-column: span 2; }
-.feature-tall{ grid-row: span 2; }
-.feature-tall .thumb{ aspect-ratio: 3 / 4; } /* keep tall intentional */
+  .thumb{
+    width:100%;
+    aspect-ratio:3 / 2;
+    border-radius:10px;
+    overflow:hidden;
+    background:#000;
+    cursor:pointer;
+  }
 
-.caption{
-  font-size:13px;
-  color:var(--muted);
-  margin-top:8px;
-  padding-left:2px;
-}
+  .thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform .3s ease;
+  }
 
-/* ===== Lightbox ===== */
-.lightbox{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  display:none;
-  z-index:9999;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-}
-.lightbox.is-open{ display:flex; }
+  .thumb:hover img{
+    transform:scale(1.03);
+  }
 
-.lightbox__frame{
-  width:min(1200px,96vw);
-  height:92vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-}
+  .caption{
+    font-size:13px;
+    color:var(--muted);
+  }
 
-.lightbox__img{
-  width:100%;
-  height:100%;
-  object-fit:contain;  /* fit whole image on screen */
-  background:#000;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.18);
-}
+  /* Lightbox */
+  .lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.92);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    padding:20px;
+  }
 
-.lightbox__cap{
-  width:100%;
-  color:var(--muted);
-  font-size:13px;
-  text-align:left;
-}
+  .lightbox img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+  }
 
-.lightbox__close{
-  position:fixed;
-  top:18px;
-  right:18px;
-  background:rgba(17,17,17,.7);
-  color:var(--ink);
-  border:1px solid rgba(204,255,221,.5);
-  border-radius:10px;
-  padding:10px 12px;
-  cursor:pointer;
-}
-.lightbox__close:hover{ background:rgba(21,21,21,.9); }
+  .lightbox.active{display:flex}
 
-body.no-scroll{ overflow:hidden; }
+  .lightbox-close{
+    position:absolute;
+    top:20px;
+    right:24px;
+    font-size:26px;
+    color:var(--ink);
+    cursor:pointer;
+    opacity:.8;
+  }
 
-footer{border-top:1px solid var(--rule);margin-top:60px}
-.small{font-size:13px;color:var(--muted)}
+  .lightbox-close:hover{opacity:1}
+
+  .small{
+    font-size:13px;
+    color:var(--muted);
+  }
 </style>
 </head>
 
@@ -164,16 +152,14 @@ footer{border-top:1px solid var(--rule);margin-top:60px}
 <header>
   <div class="wrap">
     <nav>
-      <div class="brand"><a href="/">DD Island</a></div>
-
-      <!-- Match the home-page tabs -->
-      <div class="nav-links small">
-        <a href="/#about">About</a>
+      <div class="brand">DD Island</div>
+      <div class="nav-links">
+        <a href="/">About</a>
         <a href="/#music">Music</a>
         <a href="/#shows">Shows</a>
         <a href="/#merch">Merch</a>
         <a href="/#contact">Contact</a>
-        <a class="active" href="/gallery/">Gallery</a>
+        <a href="/gallery/" class="active">Gallery</a>
       </div>
     </nav>
   </div>
@@ -182,40 +168,36 @@ footer{border-top:1px solid var(--rule);margin-top:60px}
 <main>
   <div class="wrap">
     <h1>Gallery</h1>
-    <p class="subtle">Click an image to view larger.</p>
 
-    <div class="gallery" id="gallery">
+    <div class="gallery">
 
-      <!-- By default everything is consistent.
-           If you want ONE featured image, add feature-wide or feature-tall to a figure. -->
-
-      <figure class="figure">
-        <a class="thumb" href="/gallery/0010_28.jpg" data-src="/gallery/0010_28.jpg" data-credit="Photo: Kristin Sollecito">
+      <div class="gallery-item">
+        <div class="thumb" data-full="/gallery/0010_28.jpg">
           <img src="/gallery/0010_28.jpg" alt="DD Island photo">
-        </a>
-        <figcaption class="caption">Photo: Kristin Sollecito</figcaption>
-      </figure>
+        </div>
+        <div class="caption">Photo: Kristin Sollecito</div>
+      </div>
 
-      <figure class="figure">
-        <a class="thumb" href="/gallery/0019_19 copy (1).jpg" data-src="/gallery/0019_19 copy (1).jpg" data-credit="Photo: Kristin Sollecito">
+      <div class="gallery-item">
+        <div class="thumb" data-full="/gallery/0019_19 copy (1).jpg">
           <img src="/gallery/0019_19 copy (1).jpg" alt="DD Island photo">
-        </a>
-        <figcaption class="caption">Photo: Kristin Sollecito</figcaption>
-      </figure>
+        </div>
+        <div class="caption">Photo: Kristin Sollecito</div>
+      </div>
 
-      <figure class="figure">
-        <a class="thumb" href="/gallery/0036_2 copy.jpg" data-src="/gallery/0036_2 copy.jpg" data-credit="Photo: Kristin Sollecito">
+      <div class="gallery-item">
+        <div class="thumb" data-full="/gallery/0036_2 copy.jpg">
           <img src="/gallery/0036_2 copy.jpg" alt="DD Island photo">
-        </a>
-        <figcaption class="caption">Photo: Kristin Sollecito</figcaption>
-      </figure>
+        </div>
+        <div class="caption">Photo: Kristin Sollecito</div>
+      </div>
 
-      <figure class="figure">
-        <a class="thumb" href="/gallery/IMG_2243.JPG.jpeg" data-src="/gallery/IMG_2243.JPG.jpeg" data-credit="Photo: Kristin Sollecito">
+      <div class="gallery-item">
+        <div class="thumb" data-full="/gallery/IMG_2243.JPG.jpeg">
           <img src="/gallery/IMG_2243.JPG.jpeg" alt="DD Island photo">
-        </a>
-        <figcaption class="caption">Photo: Kristin Sollecito</figcaption>
-      </figure>
+        </div>
+        <div class="caption">Photo: Kristin Sollecito</div>
+      </div>
 
     </div>
   </div>
@@ -228,46 +210,36 @@ footer{border-top:1px solid var(--rule);margin-top:60px}
 </footer>
 
 <!-- Lightbox -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <button class="lightbox__close" id="lbClose">Close</button>
-  <div class="lightbox__frame">
-    <img class="lightbox__img" id="lbImg" alt="">
-    <div class="lightbox__cap" id="lbCap"></div>
-  </div>
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close" id="lightboxClose">×</span>
+  <img id="lightboxImg" alt="">
 </div>
 
 <script>
-document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImg');
-const lbCap = document.getElementById('lbCap');
-const lbClose = document.getElementById('lbClose');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const closeBtn = document.getElementById('lightboxClose');
 
-function openLightbox(src, credit){
-  lbImg.src = src;
-  lbCap.textContent = credit || '';
-  lb.classList.add('is-open');
-  document.body.classList.add('no-scroll');
-}
+  document.querySelectorAll('.thumb').forEach(t => {
+    t.addEventListener('click', () => {
+      lightboxImg.src = t.dataset.full;
+      lightbox.classList.add('active');
+    });
+  });
 
-function closeLightbox(){
-  lb.classList.remove('is-open');
-  document.body.classList.remove('no-scroll');
-  lbImg.src = '';
-  lbCap.textContent = '';
-}
+  closeBtn.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+    lightboxImg.src = '';
+  });
 
-document.getElementById('gallery').addEventListener('click', (e)=>{
-  const a = e.target.closest('a.thumb[data-src]');
-  if(!a) return;
-  e.preventDefault();
-  openLightbox(a.dataset.src, a.dataset.credit);
-});
-
-lbClose.addEventListener('click', closeLightbox);
-lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); });
-window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
+  lightbox.addEventListener('click', e => {
+    if(e.target === lightbox){
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+    }
+  });
 </script>
 
 </body>
