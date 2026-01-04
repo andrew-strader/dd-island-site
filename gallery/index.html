@@ -13,7 +13,7 @@
     --muted:#99ccaa;
     --rule:#2a2a2a;
     --link:#b3ffcc;
-    --maxw:1400px;
+    --maxw:1700px;  /* BIGGER container */
   }
 
   html,body{height:100%}
@@ -30,12 +30,12 @@
   a:hover{text-decoration:underline}
 
   header{border-bottom:1px solid var(--rule)}
-  footer{border-top:1px solid var(--rule);margin-top:32px}
+  footer{border-top:1px solid var(--rule);margin-top:24px}
 
   .wrap{
     max-width:var(--maxw);
     margin:0 auto;
-    padding:28px 20px;
+    padding:22px 20px; /* slightly tighter to feel bigger */
   }
 
   nav{
@@ -60,43 +60,44 @@
 
   .nav-links a{opacity:.9}
   .nav-links a.active{
-    font-weight:600;
+    font-weight:700;
     opacity:1;
   }
 
   h1{
     font-size:22px;
     font-weight:600;
-    margin:0 0 24px;
+    margin:0 0 18px;
   }
 
-  /* Gallery grid */
+  /* Gallery grid: bigger tiles */
   .gallery{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
-    gap:24px;
+    grid-template-columns:repeat(auto-fit, minmax(420px, 1fr)); /* bigger minimum */
+    gap:26px;
   }
 
   .gallery-item{
     display:flex;
     flex-direction:column;
-    gap:8px;
+    gap:10px;
   }
 
   .thumb{
     width:100%;
-    aspect-ratio:3 / 2;
-    border-radius:10px;
+    aspect-ratio:16 / 9; /* a bit taller than 3/2 in feel */
+    border-radius:12px;
     overflow:hidden;
     background:#000;
     cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
   }
 
   .thumb img{
     width:100%;
     height:100%;
     object-fit:cover;
-    transition:transform .3s ease;
+    transition:transform .25s ease;
   }
 
   .thumb:hover img{
@@ -117,28 +118,59 @@
     align-items:center;
     justify-content:center;
     z-index:1000;
-    padding:20px;
-  }
-
-  .lightbox img{
-    max-width:100%;
-    max-height:100%;
-    object-fit:contain;
+    padding:24px;
   }
 
   .lightbox.active{display:flex}
 
-  .lightbox-close{
-    position:absolute;
-    top:20px;
-    right:24px;
-    font-size:26px;
-    color:var(--ink);
-    cursor:pointer;
-    opacity:.8;
+  .lightbox img{
+    max-width:92vw;
+    max-height:86vh;
+    object-fit:contain;
+    border-radius:10px;
   }
 
+  .lightbox-close{
+    position:absolute;
+    top:18px;
+    right:22px;
+    font-size:28px;
+    color:var(--ink);
+    cursor:pointer;
+    opacity:.85;
+    user-select:none;
+  }
   .lightbox-close:hover{opacity:1}
+
+  /* Side arrows */
+  .lb-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:46px;
+    height:46px;
+    border-radius:999px;
+    border:1px solid rgba(204,255,221,.35);
+    background:rgba(0,0,0,.35);
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    cursor:pointer;
+    opacity:.9;
+    user-select:none;
+  }
+  .lb-arrow:hover{background:rgba(0,0,0,.55)}
+  .lb-prev{left:18px}
+  .lb-next{right:18px}
+
+  /* Hide arrows on very small screens (still works with swipe/keys) */
+  @media (max-width:520px){
+    .lb-arrow{display:none}
+    .gallery{grid-template-columns:1fr}
+    .thumb{aspect-ratio:4/3}
+  }
 
   .small{
     font-size:13px;
@@ -210,36 +242,87 @@
 </footer>
 
 <!-- Lightbox -->
-<div class="lightbox" id="lightbox">
-  <span class="lightbox-close" id="lightboxClose">×</span>
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lb-arrow lb-prev" id="lbPrev" aria-label="Previous photo">‹</div>
   <img id="lightboxImg" alt="">
+  <div class="lb-arrow lb-next" id="lbNext" aria-label="Next photo">›</div>
+  <div class="lightbox-close" id="lightboxClose" aria-label="Close">×</div>
 </div>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  const thumbs = Array.from(document.querySelectorAll('.thumb'));
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const closeBtn = document.getElementById('lightboxClose');
+  const prevBtn = document.getElementById('lbPrev');
+  const nextBtn = document.getElementById('lbNext');
 
-  document.querySelectorAll('.thumb').forEach(t => {
-    t.addEventListener('click', () => {
-      lightboxImg.src = t.dataset.full;
-      lightbox.classList.add('active');
-    });
-  });
+  let currentIndex = 0;
 
-  closeBtn.addEventListener('click', () => {
+  function openAt(index){
+    currentIndex = (index + thumbs.length) % thumbs.length;
+    lightboxImg.src = thumbs[currentIndex].dataset.full;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden'; // prevent page scroll behind modal
+  }
+
+  function closeLightbox(){
     lightbox.classList.remove('active');
     lightboxImg.src = '';
+    document.body.style.overflow = '';
+  }
+
+  function next(){
+    openAt(currentIndex + 1);
+  }
+
+  function prev(){
+    openAt(currentIndex - 1);
+  }
+
+  thumbs.forEach((t, i) => {
+    t.addEventListener('click', () => openAt(i));
   });
 
-  lightbox.addEventListener('click', e => {
-    if(e.target === lightbox){
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
-    }
+  closeBtn.addEventListener('click', closeLightbox);
+  nextBtn.addEventListener('click', next);
+  prevBtn.addEventListener('click', prev);
+
+  // click outside image closes
+  lightbox.addEventListener('click', (e) => {
+    const clickedArrow = e.target === nextBtn || e.target === prevBtn;
+    const clickedImage = e.target === lightboxImg;
+    const clickedClose = e.target === closeBtn;
+    if (!clickedArrow && !clickedImage && !clickedClose) closeLightbox();
   });
+
+  // keyboard controls
+  window.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+
+  // simple swipe support (mobile)
+  let touchStartX = null;
+  lightbox.addEventListener('touchstart', (e) => {
+    if (!e.touches || !e.touches[0]) return;
+    touchStartX = e.touches[0].clientX;
+  }, {passive:true});
+
+  lightbox.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : null;
+    if (endX === null) return;
+    const dx = endX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0) next();
+    else prev();
+  }, {passive:true});
 </script>
 
 </body>
