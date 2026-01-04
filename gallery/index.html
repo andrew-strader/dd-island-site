@@ -24,90 +24,87 @@ body{
   font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height:1.6;
   font-size:17px;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
 a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline}
 
-header{
-  border-bottom:1px solid var(--rule);
-}
-.wrap{
-  max-width:var(--maxw);
-  margin:0 auto;
-  padding:28px 20px;
-}
+header{border-bottom:1px solid var(--rule)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:28px 20px}
 
 nav{
   display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  align-items:baseline;
   justify-content:space-between;
-  align-items:center;
 }
-.brand{
-  font-size:22px;
-  letter-spacing:.5px;
-}
-.nav-links{
-  display:flex;
-  gap:16px;
-}
+
+.brand{font-size:22px;letter-spacing:.5px}
+.nav-links{display:flex;gap:14px;align-items:center}
 .nav-links a{opacity:.9}
-
-h1{
-  font-size:22px;
-  margin:0 0 18px;
+.nav-links a.active{
+  font-weight:700;
+  opacity:1;
+  text-decoration:underline;
+  text-underline-offset:6px;
 }
 
-/* ===== Gallery Grid ===== */
+h1{font-size:22px;margin:0 0 6px}
+.subtle{color:var(--muted);font-size:13px;margin:0 0 18px}
+
+/* ===== Cleaner, consistent grid ===== */
 .gallery{
   display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap:22px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap:18px;
+  align-items:start;
 }
 
 .figure{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
+  margin:0;
 }
 
-.figure button{
-  padding:0;
-  border:none;
-  background:none;
-  cursor:pointer;
-}
-
-.figure img{
+.thumb{
   width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
+  aspect-ratio: 4 / 3;           /* consistent shape */
   border-radius:14px;
   border:1px solid var(--rule);
-  transition: transform .25s ease, opacity .25s ease;
+  overflow:hidden;
+  background:#0a0a0a;
+  cursor:pointer;
+  transition: transform .18s ease, opacity .18s ease;
+  display:block;
 }
 
-.figure img:hover{
-  transform:scale(1.02);
-  opacity:.9;
+.thumb:hover{ transform:scale(1.01); opacity:.92; }
+
+.thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
+
+/* Optional: only use these if you WANT a couple featured tiles */
+.feature-wide{ grid-column: span 2; }
+.feature-tall{ grid-row: span 2; }
+.feature-tall .thumb{ aspect-ratio: 3 / 4; } /* keep tall intentional */
 
 .caption{
   font-size:13px;
   color:var(--muted);
+  margin-top:8px;
   padding-left:2px;
 }
-
-/* Variable sizing */
-.tall{ grid-row: span 2; }
-.wide{ grid-column: span 2; }
 
 /* ===== Lightbox ===== */
 .lightbox{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.8);
+  background:rgba(0,0,0,.85);
   display:none;
   z-index:9999;
   align-items:center;
@@ -117,20 +114,29 @@ h1{
 .lightbox.is-open{ display:flex; }
 
 .lightbox__frame{
-  width:min(1100px,96vw);
+  width:min(1200px,96vw);
   height:92vh;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
+  gap:10px;
 }
 
 .lightbox__img{
   width:100%;
   height:100%;
-  object-fit:contain;
+  object-fit:contain;  /* fit whole image on screen */
   background:#000;
   border-radius:14px;
-  border:1px solid rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.18);
+}
+
+.lightbox__cap{
+  width:100%;
+  color:var(--muted);
+  font-size:13px;
+  text-align:left;
 }
 
 .lightbox__close{
@@ -144,20 +150,12 @@ h1{
   padding:10px 12px;
   cursor:pointer;
 }
-.lightbox__close:hover{
-  background:rgba(21,21,21,.9);
-}
+.lightbox__close:hover{ background:rgba(21,21,21,.9); }
 
 body.no-scroll{ overflow:hidden; }
 
-footer{
-  border-top:1px solid var(--rule);
-  margin-top:60px;
-}
-.small{
-  font-size:13px;
-  color:var(--muted);
-}
+footer{border-top:1px solid var(--rule);margin-top:60px}
+.small{font-size:13px;color:var(--muted)}
 </style>
 </head>
 
@@ -167,11 +165,15 @@ footer{
   <div class="wrap">
     <nav>
       <div class="brand"><a href="/">DD Island</a></div>
+
+      <!-- Match the home-page tabs -->
       <div class="nav-links small">
-        <a href="/">Home</a>
+        <a href="/#about">About</a>
+        <a href="/#music">Music</a>
         <a href="/#shows">Shows</a>
         <a href="/#merch">Merch</a>
         <a href="/#contact">Contact</a>
+        <a class="active" href="/gallery/">Gallery</a>
       </div>
     </nav>
   </div>
@@ -180,36 +182,40 @@ footer{
 <main>
   <div class="wrap">
     <h1>Gallery</h1>
+    <p class="subtle">Click an image to view larger.</p>
 
     <div class="gallery" id="gallery">
 
-      <div class="figure tall">
-        <button data-src="/gallery/0010_28.jpg">
+      <!-- By default everything is consistent.
+           If you want ONE featured image, add feature-wide or feature-tall to a figure. -->
+
+      <figure class="figure">
+        <a class="thumb" href="/gallery/0010_28.jpg" data-src="/gallery/0010_28.jpg" data-credit="Photo: Kristin Sollecito">
           <img src="/gallery/0010_28.jpg" alt="DD Island photo">
-        </button>
-        <div class="caption">Photo: Kristin Sollecito</div>
-      </div>
+        </a>
+        <figcaption class="caption">Photo: Kristin Sollecito</figcaption>
+      </figure>
 
-      <div class="figure">
-        <button data-src="/gallery/0019_19 copy (1).jpg">
+      <figure class="figure">
+        <a class="thumb" href="/gallery/0019_19 copy (1).jpg" data-src="/gallery/0019_19 copy (1).jpg" data-credit="Photo: Kristin Sollecito">
           <img src="/gallery/0019_19 copy (1).jpg" alt="DD Island photo">
-        </button>
-        <div class="caption">Photo: Kristin Sollecito</div>
-      </div>
+        </a>
+        <figcaption class="caption">Photo: Kristin Sollecito</figcaption>
+      </figure>
 
-      <div class="figure wide">
-        <button data-src="/gallery/0036_2 copy.jpg">
+      <figure class="figure">
+        <a class="thumb" href="/gallery/0036_2 copy.jpg" data-src="/gallery/0036_2 copy.jpg" data-credit="Photo: Kristin Sollecito">
           <img src="/gallery/0036_2 copy.jpg" alt="DD Island photo">
-        </button>
-        <div class="caption">Photo: Kristin Sollecito</div>
-      </div>
+        </a>
+        <figcaption class="caption">Photo: Kristin Sollecito</figcaption>
+      </figure>
 
-      <div class="figure tall">
-        <button data-src="/gallery/IMG_2243.JPG.jpeg">
+      <figure class="figure">
+        <a class="thumb" href="/gallery/IMG_2243.JPG.jpeg" data-src="/gallery/IMG_2243.JPG.jpeg" data-credit="Photo: Kristin Sollecito">
           <img src="/gallery/IMG_2243.JPG.jpeg" alt="DD Island photo">
-        </button>
-        <div class="caption">Photo: Kristin Sollecito</div>
-      </div>
+        </a>
+        <figcaption class="caption">Photo: Kristin Sollecito</figcaption>
+      </figure>
 
     </div>
   </div>
@@ -226,6 +232,7 @@ footer{
   <button class="lightbox__close" id="lbClose">Close</button>
   <div class="lightbox__frame">
     <img class="lightbox__img" id="lbImg" alt="">
+    <div class="lightbox__cap" id="lbCap"></div>
   </div>
 </div>
 
@@ -234,10 +241,12 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 const lb = document.getElementById('lightbox');
 const lbImg = document.getElementById('lbImg');
+const lbCap = document.getElementById('lbCap');
 const lbClose = document.getElementById('lbClose');
 
-function openLightbox(src){
+function openLightbox(src, credit){
   lbImg.src = src;
+  lbCap.textContent = credit || '';
   lb.classList.add('is-open');
   document.body.classList.add('no-scroll');
 }
@@ -246,20 +255,19 @@ function closeLightbox(){
   lb.classList.remove('is-open');
   document.body.classList.remove('no-scroll');
   lbImg.src = '';
+  lbCap.textContent = '';
 }
 
-document.getElementById('gallery').addEventListener('click', e=>{
-  const btn = e.target.closest('button[data-src]');
-  if(btn) openLightbox(btn.dataset.src);
+document.getElementById('gallery').addEventListener('click', (e)=>{
+  const a = e.target.closest('a.thumb[data-src]');
+  if(!a) return;
+  e.preventDefault();
+  openLightbox(a.dataset.src, a.dataset.credit);
 });
 
 lbClose.addEventListener('click', closeLightbox);
-lb.addEventListener('click', e=>{
-  if(e.target === lb) closeLightbox();
-});
-window.addEventListener('keydown', e=>{
-  if(e.key === 'Escape') closeLightbox();
-});
+lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); });
+window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
 </script>
 
 </body>
