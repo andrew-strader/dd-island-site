@@ -12,6 +12,10 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap" rel="stylesheet">
+
 <style>
   :root{
     --bg:#111;
@@ -27,11 +31,31 @@
     margin:0;
     background:var(--bg);
     color:var(--ink);
-    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family:"Cutive Mono", "Courier New", monospace;
     line-height:1.6;
     font-size:17px;
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing:grayscale;
+  }
+
+  /* 8-bit starry background */
+  .stars{
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    pointer-events:none;
+    z-index:-1;
+    overflow:hidden;
+  }
+  .star{
+    position:absolute;
+    font-size:10px;
+    line-height:1;
+    animation:spinflare 4s ease-in-out infinite;
+  }
+  @keyframes spinflare{
+    0%{opacity:0.3;transform:rotate(0deg) scale(0.8)}
+    50%{opacity:1;transform:rotate(180deg) scale(1.3)}
+    100%{opacity:0.3;transform:rotate(360deg) scale(0.8)}
   }
 
   a{color:var(--link);text-decoration:none}
@@ -48,9 +72,11 @@
     justify-content:space-between;
   }
 
-  .brand{font-size:22px;letter-spacing:.5px}
+  .brand{font-size:22px;letter-spacing:.5px;font-weight:700}
   .nav-links{display:flex;gap:14px;align-items:center}
-  .nav-links a{opacity:.9}
+  .nav-links a{opacity:.9;font-weight:700}
+  .social-icon{display:flex;align-items:center}
+  .social-icon:hover{opacity:1}
 
   .hero{padding:28px 0 8px}
   .photo-shell{
@@ -103,6 +129,8 @@
 
 <body>
 
+<div class="stars"></div>
+
 <header>
   <div class="wrap">
     <nav>
@@ -114,6 +142,13 @@
         <a href="/gallery/">Gallery</a>
         <a href="#merch">Merch</a>
         <a href="#contact">Contact</a>
+        <a href="https://www.instagram.com/dd.island/?hl=en" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
       </div>
     </nav>
 
@@ -155,8 +190,8 @@
   <div class="wrap">
     <h2>Music</h2>
 
-    <a class="btn" href="https://ffm.to/ddisland" target="_blank" rel="noopener">
-      Stream “waiting for the day”
+    <a class="btn" href="https://tr.ee/NZ4bOWVeSV" target="_blank" rel="noopener">
+      Listen to "All the Same"
     </a><br><br>
 
     <a class="btn" href="https://www.youtube.com/watch?v=mB9XFqo_M-I" target="_blank" rel="noopener">
@@ -233,6 +268,25 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Generate spinning asterisk stars
+  (function(){
+    var container = document.querySelector('.stars');
+    var colors = ['#ccffdd', '#99ccaa', '#b3ffcc'];
+    var starCount = 60;
+    for(var i = 0; i < starCount; i++){
+      var star = document.createElement('span');
+      star.className = 'star';
+      star.textContent = '*';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.color = colors[Math.floor(Math.random() * colors.length)];
+      star.style.fontSize = (8 + Math.random() * 8) + 'px';
+      star.style.animationDelay = (Math.random() * 4) + 's';
+      star.style.animationDuration = (3 + Math.random() * 4) + 's';
+      container.appendChild(star);
+    }
+  })();
 </script>
 
 <script charset="utf-8" src="https://widget.bandsintown.com/main.min.js"></script>
